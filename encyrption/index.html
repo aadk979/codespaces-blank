@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket.IO Encryption Example</title>
+</head>
+<body>
+    <script src="https://cdn.socket.io/socket.io-4.0.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <!-- cdnjs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+
+<!-- jsDelivr -->
+<script src="https://cdn.jsdelivr.net/npm/socket.io@4.3.2/dist/socket.io.js"></script>
+
+<!-- unpkg -->
+<script src="https://unpkg.com/socket.io@4.3.2/dist/socket.io.js"></script>
+
+<!-- Cloudflare CDN -->
+<script src="https://cdn.jsdelivr.net/npm/socket.io@4.3.2/dist/socket.io.js"></script>
+
+    <script>
+        const socket = io();
+
+        // Send request to server for generating encryption key
+        socket.emit('generateKey');
+
+        // Receive encryption key from server
+        socket.on('encryptionKey', (key) => {
+            // Store encryption key securely on the client-side (e.g., in memory)
+            const encryptionKey = key;
+
+            // Example message to send
+            const message = 'Hello, server!';
+
+            // Encrypt message with encryption key
+            const encryptedMessage = CryptoJS.AES.encrypt(message, encryptionKey).toString();
+
+            // Send encrypted message to server
+            socket.emit('encryptedMessage', encryptedMessage);
+        });
+    </script>
+</body>
+</html>
